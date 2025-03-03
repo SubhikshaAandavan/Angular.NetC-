@@ -1,0 +1,85 @@
+<div class="header">
+  <button mat-raised-button style="color: rgb(20, 9, 1);background-color: darkgrey;height: 1cm;" (click)="openNewMessageDialog()">
+    ✏️ New Message
+  </button>
+  
+
+
+
+<div class="filter-container">
+  <mat-form-field appearance="outline" class="filter-input">
+    <input #filterInput matInput (keyup)="applyFilter(filterInput.value)" placeholder=" 🔍   Search Mails" style="height:1cm;width: 50%;margin-left: 30px;" />
+  </mat-form-field>
+  <button mat-raised-button style="margin-left: 100px;" color="accent" (click)="sortByDate()">Sort by Date </button>
+ 
+</div>
+</div>
+
+
+
+<div class="table-container" >
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+    
+
+<ng-container matColumnDef="sentTo">
+  <th mat-header-cell *matHeaderCellDef  mat-sort-header>Sent To</th>
+  <td mat-cell *matCellDef="let email">
+    {{ getSentToDisplay(email.sentTo) }}
+  </td>
+</ng-container>
+
+
+
+    <ng-container matColumnDef="subject">
+      <th mat-header-cell *matHeaderCellDef  mat-sort-header>Subject</th>
+      <td mat-cell *matCellDef="let email">
+        <a class="subject-link" (click)="openEmailDetails(email)">
+          {{ email.subject }}
+        </a>
+      </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef  mat-sort-header>Date</th>
+      <td mat-cell *matCellDef="let email">
+        {{ email.date | date:'short' }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="cc">
+      <th mat-header-cell *matHeaderCellDef  mat-sort-header>CC</th>
+      <td mat-cell *matCellDef="let email">
+        {{ email.cc.join(', ') }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="bcc">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>BCC</th>
+      <td mat-cell *matCellDef="let email">
+        {{ email.bcc.join(', ') }}
+      </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="body">
+      <th mat-header-cell *matHeaderCellDef  mat-sort-header>Body</th>
+      <td mat-cell *matCellDef="let email">
+        {{ email.body }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="sentStatus">
+      <th mat-header-cell *matHeaderCellDef  mat-sort-header>Sent Status</th>
+      <td mat-cell *matCellDef="let email">
+        <span [ngClass]="{'success': email.sentStatus === 'Success', 'failure': email.sentStatus === 'Unsuccess'}">
+          {{ email.sentStatus }}
+        </span>
+      </td>
+    </ng-container>
+  
+    
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover-row"></tr>
+  </table>
+</div>

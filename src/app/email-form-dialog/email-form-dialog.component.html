@@ -1,0 +1,146 @@
+<mat-dialog-content class="box">
+  <h2 mat-dialog-title class="email-title">Compose New Email</h2>
+  <form #emailForm="ngForm" (ngSubmit)="onSubmit()">
+    
+    <div class="form-group">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>From</mat-label>
+        <input
+          matInput
+          type="email"
+          [(ngModel)]="emailData.from"
+          name="from"
+          required
+          email
+          #from="ngModel"
+        />
+        <mat-error *ngIf="from.invalid && (from.dirty || from.touched)">
+          <span *ngIf="from.errors?.['required']">From is required.</span>
+          <span *ngIf="from.errors?.['email']">Enter a valid email.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-group">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>To</mat-label>
+        <mat-chip-grid #chipGridTo>
+          <mat-chip-row
+            *ngFor="let recipient of emailData.to"
+            (removed)="removeTo(recipient)"
+          >
+            {{ getDisplayName(recipient) }}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+          <input
+            [matChipInputFor]="chipGridTo"
+            (matChipInputTokenEnd)="addTo($event)"
+            placeholder="Add recipient"
+            required
+          />
+        </mat-chip-grid>
+        <mat-error *ngIf="!emailData.to.length && emailForm.submitted">
+          At least one recipient is required.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-group">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>CC</mat-label>
+        <mat-chip-grid #chipGridCc>
+          <mat-chip-row
+            *ngFor="let recipient of emailData.cc"
+            (removed)="removeCc(recipient)"
+          >
+            {{ getDisplayName(recipient) }}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+          <input
+            [matChipInputFor]="chipGridCc"
+            (matChipInputTokenEnd)="addCc($event)"
+            placeholder="Add CC"
+          />
+        </mat-chip-grid>
+      </mat-form-field>
+    </div>
+
+    <div class="form-group">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>BCC</mat-label>
+        <mat-chip-grid #chipGridBcc>
+          <mat-chip-row
+            *ngFor="let recipient of emailData.bcc"
+            (removed)="removeBcc(recipient)"
+          >
+            {{ getDisplayName(recipient) }}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+          <input
+            [matChipInputFor]="chipGridBcc"
+            (matChipInputTokenEnd)="addBcc($event)"
+            placeholder="Add BCC"
+          />
+        </mat-chip-grid>
+      </mat-form-field>
+    </div>
+
+    <div class="form-group">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Subject</mat-label>
+        <input
+          matInput
+          [(ngModel)]="emailData.subject"
+          name="subject"
+          required
+          #subject="ngModel"
+        />
+        <mat-error *ngIf="subject.invalid && (subject.dirty || subject.touched)">
+          Subject is required.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-group">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Body</mat-label>
+        <textarea
+          matInput
+          rows="5"
+          [(ngModel)]="emailData.body"
+          name="body"
+          required
+          #body="ngModel"
+        ></textarea>
+        <mat-error *ngIf="body.invalid && (body.dirty || body.touched)">
+          Body is required.
+        </mat-error>
+      </mat-form-field>
+    </div>
+  
+
+
+  <button
+    mat-raised-button
+    class="send-btn"
+    color="primary"
+    type="submit"
+    [disabled]="emailForm.invalid || emailData.to.length === 0"
+  >
+    Send
+  </button>
+  <button mat-raised-button color="warn" type="button" (click)="onCancel()">
+    Reset
+  </button>
+  <button mat-raised-button color="warn" type="button" (click)="onCancelNewMessage()">
+    Back
+  </button>
+
+</form>
+</mat-dialog-content>

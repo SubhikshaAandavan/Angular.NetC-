@@ -1,0 +1,17 @@
+.box{
+    padding:20px;
+    text-align: center;
+    border-radius: 2px;
+    border-color: rgb(206, 122, 20);
+    border-style:double;
+}
+.form-group {
+    margin:5px;
+    max-width: 600px;
+    justify-content: space-between;
+    align-items: center;
+  }
+ 
+  mat-form-field{
+    width:400px;
+  }
